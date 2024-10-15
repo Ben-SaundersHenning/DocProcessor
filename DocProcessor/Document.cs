@@ -135,6 +135,40 @@ public class Document: IDisposable
         
     }
     
+    public void ReplaceTextWithDocument(string text, Document doc)
+    {
+
+        string altChunkId = "AltChunkId1";
+        AlternativeFormatImportPart chunk = MainPart.AddAlternativeFormatImportPart(AlternativeFormatImportPartType.WordprocessingML, altChunkId);
+
+        using (FileStream fileSteam = File.Open(doc.SavePath, FileMode.Open))
+        {
+            chunk.FeedData(fileSteam);
+        }
+
+        AltChunk altChunk = new AltChunk();
+        altChunk.Id = altChunkId;
+        
+        Paragraph? para = Body.Descendants<Paragraph>().FirstOrDefault(p => p.InnerText.Contains(text));
+
+        if (para == null) return; //text doesn't exist in doc
+        
+        if (para.Descendants<Text>().Count() > 1)
+        {
+            IsolatePatternInParagraph(para, text);
+        }
+
+        Text? t = para.Descendants<Text>().FirstOrDefault(t => t.Text.Contains(text));
+
+        if (t == null) return;
+
+        t.InsertAfterSelf(altChunk);
+        t.Remove();
+
+        MainPart.Document.Save();
+
+    } 
+    
     public void ReplaceTextWithImage(string text, Image image)
     {
 
