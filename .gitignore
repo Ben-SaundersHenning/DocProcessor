@@ -1,3 +1,6 @@
 .idea/.idea.DocProcessor/.idea
 obj
-TestRunner
+# TestRunner
+DocProcessor/bin/Debug/net8.0
+TestRunner/bin/Debug/net8.0
+TestRunner/documents

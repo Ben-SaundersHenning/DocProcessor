@@ -148,24 +148,32 @@ public class Document: IDisposable
 
         AltChunk altChunk = new AltChunk();
         altChunk.Id = altChunkId;
-        
+
+        /*
+        MainPart.Document.Body.InsertAfter(altChunk,
+            MainPart.Document.Body.Elements<Paragraph>().Last());
+            */
+
         Paragraph? para = Body.Descendants<Paragraph>().FirstOrDefault(p => p.InnerText.Contains(text));
 
         if (para == null) return; //text doesn't exist in doc
         
-        if (para.Descendants<Text>().Count() > 1)
-        {
-            IsolatePatternInParagraph(para, text);
-        }
+        //if (para.Descendants<Text>().Count() > 1)
+        //{
+            //IsolatePatternInParagraph(para, text);
+        //}
 
-        Text? t = para.Descendants<Text>().FirstOrDefault(t => t.Text.Contains(text));
+        //Text? t = para.Descendants<Text>().FirstOrDefault(t => t.Text.Contains(text));
 
-        if (t == null) return;
+        //if (t == null) return;
 
-        t.InsertAfterSelf(altChunk);
-        t.Remove();
-
-        MainPart.Document.Save();
+        para.InsertAfterSelf(altChunk);
+        
+        // Remove a paragraph if the tag was the only text it in
+        // This doesn't account for scenarios where a paragraph has intentional styling but no text.
+        if (para.InnerText == text) para.Remove();
+        
+        //t.Remove();
 
     } 
     
