@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocProcessor", "DocProcessor\DocProcessor.csproj", "{F1A49043-E5D0-4551-8718-4DAE53CF7D7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP", "CDP\CDP.csproj", "{35A1892A-549A-4F6E-BAC5-98C417B4268F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{F1A49043-E5D0-4551-8718-4DAE53CF7D7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1A49043-E5D0-4551-8718-4DAE53CF7D7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1A49043-E5D0-4551-8718-4DAE53CF7D7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35A1892A-549A-4F6E-BAC5-98C417B4268F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35A1892A-549A-4F6E-BAC5-98C417B4268F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35A1892A-549A-4F6E-BAC5-98C417B4268F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35A1892A-549A-4F6E-BAC5-98C417B4268F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

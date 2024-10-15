@@ -1,0 +1,12 @@
+A tag in a document will look something like:
+
+<<[claimant.first_name] :Upper>>
+<<doc [../Components/File.docx]>>
+<<if [claimant.gender == male]>>Some Stuff Here<<@if>>
+
+Meaning the corresponding CDP statements are:
+
+[claimant.first_name] :Upper
+doc [../Components/File.docx]
+if [claimant.gender == male]
+if/

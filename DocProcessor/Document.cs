@@ -173,6 +173,13 @@ public class Document: IDisposable
         // This doesn't account for scenarios where a paragraph has intentional styling but no text.
         if (para.InnerText == text) para.Remove();
         
+        // TODO
+        // Right now, the AltChunk gets inserted into the document,
+        // and that's it. If you open it in word, the resulting document has the Altchunk 
+        // until it gets saved to a new file. That's when the changes get 'merged'.
+        // Need to make that 'merging' happen here.
+        // This will also resolve the issue of Libreoffice treating the file as corrupt.
+        
         //t.Remove();
 
     } 

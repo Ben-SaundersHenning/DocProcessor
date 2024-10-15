@@ -9,7 +9,9 @@ Document mainDoc = new Document(source1, DocumentType.ExistingDocument);
 Document subDoc = new Document(source2, DocumentType.ExistingDocument);
 
 mainDoc.ReplaceTextWithDocument("<HOUSEKEEPING>", subDoc);
+
+subDoc.Dispose();
+
 mainDoc.SaveAs(savePath);
 mainDoc.Dispose();
 
-subDoc.Dispose();
