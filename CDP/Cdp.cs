@@ -7,7 +7,8 @@ public class Cdp
 
     static void Main(string[] args)
     {
-        if (args.Length > 1 && args.Length == 0)
+        Console.WriteLine($"ARGS LEN: {args.Length}");
+        if (args.Length > 1 || args.Length == 0)
         {
             Console.WriteLine("Usage: cdp [script]");
             System.Environment.Exit(64);

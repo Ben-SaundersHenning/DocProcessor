@@ -1,3 +1,6 @@
+using System.Data.Common;
+using System.Runtime.InteropServices.JavaScript;
+
 namespace CDP;
 
 public class Scanner
@@ -8,12 +11,32 @@ public class Scanner
     private int current = 0;
     private int line = 1;
 
-    internal Scanner(string soruce)
+    private static readonly Dictionary<String, TokenType> keywords = new Dictionary<string, TokenType>()
+    {
+        {"and",    TokenType.AND },
+        {"class",  TokenType.CLASS},
+        {"else",   TokenType.ELSE},
+        {"false",  TokenType.FALSE},
+        {"for",    TokenType.FOR},
+        {"fun",    TokenType.FUN},
+        {"if",     TokenType.IF},
+        {"nil",    TokenType.NIL},
+        {"or",     TokenType.OR},
+        {"print",  TokenType.PRINT},
+        {"return", TokenType.RETURN},
+        {"super",  TokenType.SUPER},
+        {"this",   TokenType.THIS},
+        {"true",   TokenType.TRUE},
+        {"var",    TokenType.VAR},
+        {"while",  TokenType.WHILE}
+    };
+
+    internal Scanner(string source)
     {
         this.source = source;
     }
 
-    internal List<Token> scanTokens()
+    public List<Token> scanTokens()
     {
         while (!isAtEnd())
         {
@@ -55,10 +78,110 @@ public class Scanner
            case '>':
                addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
                break; 
+           case '/':
+               if (match('/')) {
+                   // A comment goes until the end of the line.
+                   while (peek() != '\n' && !isAtEnd()) advance();
+               } else {
+                   addToken(TokenType.SLASH);
+               }
+               break; 
+           case ' ':
+           case '\r':
+           case '\t':
+               // Ignore whitespace.
+               break;
+
+           case '\n':
+               line++;
+               break;
+           case '"': 
+               strings();
+               break;
            default:
-               Cdp.error(line, "Unexpected character.");
+               if (Char.IsDigit(c))
+               {
+                   number();
+               }
+               else if (Char.IsLetter(c))
+               {
+                   identifier();
+               }
+               else 
+               {
+                   Cdp.error(line, "Unexpected character.");
+               }
                break;
         }
+    }
+
+    private void identifier()
+    {
+        
+        while (Char.IsLetterOrDigit(peek())) advance();
+
+        //string text = source.Substring(start, current);
+        string text = source.Substring(start, current - start);
+        if (keywords.ContainsKey(text))
+        {
+            TokenType type = keywords[text];
+            addToken(type);
+        }
+        else
+        {
+            addToken(TokenType.IDENTIFIER);
+        }
+        
+    }
+
+    private void number()
+    {
+        while (Char.IsDigit(peek())) advance();
+
+        if (peek() == '.' && Char.IsDigit(peekNext()))
+        {
+            advance();
+
+            while (Char.IsDigit(peek())) advance();
+        }
+        
+        //addToken(TokenType.NUMBER, Double.Parse(source.Substring(start, current)));
+        addToken(TokenType.NUMBER, Double.Parse(source.Substring(start, current - start)));
+        
+    }
+
+    private char peekNext()
+    {
+        if (current + 1 >= source.Length) return '\0';
+        return source.ElementAt(current + 1);
+    }
+    
+    private void strings()
+    {
+        while (peek() != '"' && !isAtEnd())
+        {
+            if (peek() == '\n') line++;
+            advance();
+        }
+
+        if (isAtEnd())
+        {
+            Cdp.error(line, "Unterminated string.");
+            return;
+        }
+
+        advance();
+        
+        // string value = source.Substring(start + 1, current - 1);
+        string value = source.Substring(start + 1, current - start - 2);
+        addToken(TokenType.STRING, value);
+
+    }
+
+    private char peek()
+    {
+        if (isAtEnd()) return '\0';
+        return source.ElementAt(current);
     }
 
     private bool match(char expected)
@@ -83,7 +206,8 @@ public class Scanner
 
     private void addToken(TokenType type, Object literal)
     {
-        string text = source.Substring(start, current);
+        //string text = source.Substring(start, current);
+        string text = source.Substring(start, current - start);
         tokens.Add(new Token(type, text, literal, line));
     }
 
