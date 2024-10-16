@@ -28,12 +28,15 @@ public class Document: IDisposable
     private string SavePath { get; set; }
     private string TempPath { get; set; }
     
+    private uint AltChunkCount { get; set; }
+    
     
     public Document(string path, DocumentType type)
     {
         
         SavePath = path;
         TempPath = SavePath.Replace(".docx", "_temp.docx");
+        AltChunkCount = 0; 
         CreateTempCopyOfDocument(SavePath, TempPath);
         if (type == DocumentType.ExistingDocument)
         {
@@ -138,7 +141,7 @@ public class Document: IDisposable
     public void ReplaceTextWithDocument(string text, Document doc)
     {
 
-        string altChunkId = "AltChunkId1";
+        string altChunkId = $"AltChunkId{++AltChunkCount}";
         AlternativeFormatImportPart chunk = MainPart.AddAlternativeFormatImportPart(AlternativeFormatImportPartType.WordprocessingML, altChunkId);
 
         using (FileStream fileSteam = File.Open(doc.SavePath, FileMode.Open))

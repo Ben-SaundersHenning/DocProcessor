@@ -9,4 +9,6 @@ Meaning the corresponding CDP statements are:
 [claimant.first_name] :Upper
 doc [../Components/File.docx]
 if [claimant.gender == male]
-if/
+
+The @if isn't a statement, any tags starting with @ are going to be automatically removed
+from the document.
